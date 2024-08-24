@@ -1,6 +1,8 @@
 package com.company;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class PhoneBook {
     private Map<String, Set<String>> contactBook;
@@ -29,36 +31,31 @@ public class PhoneBook {
             }
             contactBook.putIfAbsent(name, new HashSet<>());
             contactBook.get(name).add(phone);
-
-
         }
-        // TODO проверь корректность формата имени и телефона
-        // TODO (рекомендуется написать отдельные методы для проверки является строка именем/телефоном)
-        // TODO если такой номер уже есть в списке, то перезаписать имя абонента
     }
 
-    /*
-     new Number - new Phone
-     new Number - old Phone
-     old Number - new Phone
-     old Number - old Phone
-     */
     public Set<String> getContactByName(String name) {
-        // TODO формат одного контакта "Имя - Телефон"
-        // TODO если контакт не найден - вернуть пустой TreeSet
-        return null;
+        if (!contactBook.containsKey(name)) {
+            new TreeSet<>();
+        }
+        return Set.of(name + " - " + String.join(", ", contactBook.get(name)));
     }
 
     public String getContactByPhone(String phone) {
-        // TODO формат одного контакта "Имя - Телефон"
-        // TODO если контакт не найдены - вернуть пустую строку
-        return null;
+        return contactBook.entrySet().stream()
+                .filter(entry -> entry.getValue().contains(phone))
+                .findFirst()
+                .map(entry -> entry.getKey() + " - " + String.join(", ", entry.getValue()))
+                .orElse("");
     }
 
     public Set<String> getAllContacts() {
-        // TODO формат одного контакта "Имя - Телефон"
-        // TODO если контактов нет в телефонной книге - вернуть пустой TreeSet
-        return null;
+        if (contactBook.isEmpty()) {
+            return new TreeSet<>();
+        }
+        return contactBook.entrySet().stream()
+                .map(entry -> entry.getKey() + " - " + String.join(", ", entry.getValue()))
+                .collect(Collectors.toSet());
     }
 
     public boolean checkName(String name) {
