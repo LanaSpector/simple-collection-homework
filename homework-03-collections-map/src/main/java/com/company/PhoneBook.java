@@ -21,14 +21,22 @@ public class PhoneBook {
 //                Set<String> set = contactBook.get(name);
 //                set.add(phone);
 //            }
-            Set<Map.Entry<String, Set<String>>> entries = contactBook.entrySet();
-            for (Map.Entry<String, Set<String>> entry : new HashSet<>(entries)) {
-                Set<String> values = entry.getValue();
-                values.remove(phone);
-                if (values.isEmpty()) {
-                    contactBook.remove(entry.getKey());
-                }
-            }
+
+
+//            Set<Map.Entry<String, Set<String>>> entries = contactBook.entrySet();
+//            for (Map.Entry<String, Set<String>> entry : new HashSet<>(entries)) {
+//                Set<String> values = entry.getValue();
+//                values.remove(phone);
+//                if (values.isEmpty()) {
+//                    contactBook.remove(entry.getKey());
+//                }
+//            }
+
+            contactBook = contactBook.entrySet().stream()
+                    .peek(entry -> entry.getValue().remove(phone))
+                    .filter(entry -> !entry.getValue().isEmpty())
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
             contactBook.putIfAbsent(name, new HashSet<>());
             contactBook.get(name).add(phone);
         }
