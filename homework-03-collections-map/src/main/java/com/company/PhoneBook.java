@@ -2,7 +2,6 @@ package com.company;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class PhoneBook {
     private Map<String, Set<String>> contactBook;
@@ -13,24 +12,6 @@ public class PhoneBook {
 
     public void addContact(String name, String phone) {
         if (checkName(name) && checkNumber(phone)) {
-//            if (!contactBook.containsKey(name)) {
-//                Set<String> setPhones = new HashSet<>();
-//                setPhones.add(phone);
-//                contactBook.put(name, setPhones);
-//            } else {
-//                Set<String> set = contactBook.get(name);
-//                set.add(phone);
-//            }
-
-
-//            Set<Map.Entry<String, Set<String>>> entries = contactBook.entrySet();
-//            for (Map.Entry<String, Set<String>> entry : new HashSet<>(entries)) {
-//                Set<String> values = entry.getValue();
-//                values.remove(phone);
-//                if (values.isEmpty()) {
-//                    contactBook.remove(entry.getKey());
-//                }
-//            }
 
             contactBook = contactBook.entrySet().stream()
                     .peek(entry -> entry.getValue().remove(phone))
@@ -73,4 +54,19 @@ public class PhoneBook {
     public boolean checkNumber(String phoneNumber) {
         return phoneNumber.matches("^7\\d{10}$");
     }
+
+    public boolean containsName(String name) {
+        for (String mapName : contactBook.keySet()) {
+            if (name.equals(mapName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean containsNumber(String numb) {
+        return contactBook.entrySet().stream()
+                .anyMatch(entry -> entry.getValue().contains(numb));
+    }
+
 }
