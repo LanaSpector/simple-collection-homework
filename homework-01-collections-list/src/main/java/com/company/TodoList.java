@@ -1,7 +1,6 @@
 package com.company;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class TodoList {
     private ArrayList<String> list = new ArrayList<>();
@@ -9,7 +8,8 @@ public class TodoList {
     public void add(String todo) {
         // TODO: добавьте переданное дело в конец списка
         list.add(todo);
-        ConsoleHelper.writeMessage("Добавлено дело " + "\"" + todo + "\"" );
+        ConsoleHelper.writeMessage(String.format("Добавлено дело \"%s\"", todo));
+
     }
 
     public void add(int index, String todo) {
@@ -17,9 +17,8 @@ public class TodoList {
         //  проверьте возможность добавления
         if (index >= 0 && index <= list.size()) {
             list.add(index, todo);
-            ConsoleHelper.writeMessage("Замена произведена успешно");
-        }
-        else {
+            ConsoleHelper.writeMessage(String.format("В позицию %d добавлено дело \"%s\"", index, todo));
+        } else {
             list.add(todo);
         }
     }
@@ -28,9 +27,9 @@ public class TodoList {
         // TODO: заменить дело на index переданным todo индекс,
         //  проверьте возможность изменения
         if (index >= 0 && index <= list.size()) {
-            list.set(index, todo);
-        }
-        else {
+            String newToDo = list.set(index, todo);
+            ConsoleHelper.writeMessage(String.format("Дело \"%s\" заменено на \"%s\"", todo, newToDo));
+        } else {
             ConsoleHelper.writeMessage("Замена по указанному индексу невозможна");
         }
 
@@ -39,10 +38,10 @@ public class TodoList {
     public void delete(int index) {
         // TODO: удалить дело находящееся по переданному индексу,
         //  проверьте возможность удаления дела
-        if (index >= 0 && index <= list.size()) {
-            list.remove(index);
-        }
-        else {
+        if (index >= 0 && index < list.size()) {
+            String removed = list.remove(index);
+            ConsoleHelper.writeMessage(String.format("Дело \"%s\" удалено", removed));
+        } else {
             System.out.println("Дело с таким номером не существует");
         }
 

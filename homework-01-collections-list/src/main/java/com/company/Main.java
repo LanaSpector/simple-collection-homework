@@ -8,38 +8,37 @@ public class Main {
         // TODO: написать консольное приложение для работы со списком дел todoList
         TodoList todoList = new TodoList();
         ArrayList<String> list = todoList.getTodos();
-        list.add("buy milk");
-        list.add("make a cup of tea");
-        list.add("run for life");
+        int inputIndex = 0;
+        String newString = "";
+        boolean isDigit = false;
+        boolean isExit = false;
 
-
-        while (true) {
+        while (!isExit) {
             ConsoleHelper.writeMessage("Введите команду:");
             String inputString = ConsoleHelper.readString();
             String[] strings = inputString.split(" ");
-            int inputIndex = Integer.parseInt(strings[1]);
-            String[] newString = Arrays.copyOfRange(strings, 2, strings.length + 1);
+
+            if (strings.length > 1 && strings[1].matches("[0-9]+")) {
+                isDigit = true;
+                inputIndex = Integer.parseInt(strings[1]);
+                newString = String.join(" ", Arrays.copyOfRange(strings, 2, strings.length));
+            }
             switch (strings[0]) {
                 case "ADD":
-                    if (strings[1].matches("[0-9]+")) {
-                        todoList.add(inputIndex, String.join(" ", newString));
-                        break;
+                    if (isDigit) {
+                        todoList.add(inputIndex, newString);
                     } else {
-                        todoList.add(String.join(" ", newString));
-                        break;
+                        todoList.add(String.join(" ", Arrays.copyOfRange(strings, 1, strings.length)));
                     }
                 case "LIST":
                     list.forEach(index -> ConsoleHelper.writeMessage(list.indexOf(index) + " - " + list.get(list.indexOf(index))));
-                    break;
                 case "EDIT":
-                    todoList.edit(inputIndex, String.join(" ", newString));
-                    break;
+                    todoList.edit(inputIndex, newString);
                 case "DELETE":
                     todoList.delete(inputIndex);
-                    break;
                 default:
                     ConsoleHelper.writeMessage("Неверный формат ввода данных.");
-                    continue;
+                    isExit = true;
             }
         }
     }

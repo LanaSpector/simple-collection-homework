@@ -1,8 +1,9 @@
-package set;
+package com.company;
 
-import map.ConsoleHelper;
 
-public class Main implements ConstantsSet {
+import static com.company.ConstantsSet.*;
+
+public class Main {
      /* TODO:
         Пример вывода списка Email, после ввода команды LIST в консоль:
         test@test.com
@@ -20,18 +21,9 @@ public class Main implements ConstantsSet {
     public static void main(String[] args) {
         //TODO: write code here
         EmailList list = new EmailList();
-        list.add("sweden@mail.ru");
-        list.add("345-irurj@mail.com");
-        list.add("Zubr@mail.fgrt");
-        list.add("lung-lung@gmail.ru");
-        list.add("q@g.ru");
-        list.add("ifgftUj@fd.ru");
-        list.add("we@q.ytu");
+        boolean isExit = false;
 
-        System.out.println(list.getSortedEmails());
-
-
-        while (true) {
+        while (!isExit) {
             ConsoleHelper.writeMessage(COMMAND);
             String inputString = ConsoleHelper.readString();
             if (inputString.startsWith("ADD")) {
@@ -39,16 +31,12 @@ public class Main implements ConstantsSet {
                 if (list.checkEmail(strings[1])) {
                     list.add(strings[1]);
                     ConsoleHelper.writeMessage(EMAIL_SAVED);
-                    break;
                 } else {
                     ConsoleHelper.writeMessage(WRONG_INPUT_EMAIL_FORMAT);
-                    continue;
                 }
             } else if (inputString.equals("LIST")) {
-                for (String email : list.getSortedEmails()) {
-                    ConsoleHelper.writeMessage(email);
-                }
-                break;
+                list.getSortedEmails().forEach(ConsoleHelper::writeMessage);
+                isExit = true;
             }
         }
     }
